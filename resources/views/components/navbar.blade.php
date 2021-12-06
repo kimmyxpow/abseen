@@ -64,7 +64,7 @@
             </a>
          </li>
          @if (Auth::user()->role != 'Siswa')
-            <li class="nav-item {{ Route::is('absensi.index') ? 'active' : '' }}">
+            <li class="nav-item {{ Route::is('absent.index') || Route::is('absent.create') || Route::is('absent.edit') || Route::is('absent.student') ? 'active' : '' }}">
                <a href="/dashboard/absensi" class="nav-link d-flex align-items-center">
                   <ion-icon name="hand-right-outline" class="fs-5 me-3"></ion-icon>
                   <span class="sidebar-text">Absensi</span>

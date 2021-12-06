@@ -20,4 +20,14 @@ class Rayon extends Model
     {
         return $this->hasMany(User::class);
     }
+
+    /**
+     * Get all of the absent for the Rayon
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function absent()
+    {
+        return $this->hasMany(Absent::class);
+    }
 }

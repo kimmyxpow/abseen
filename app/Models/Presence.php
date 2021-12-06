@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Rombel extends Model
+class Presence extends Model
 {
     use HasFactory;
 
@@ -13,16 +13,11 @@ class Rombel extends Model
 
     public function user()
     {
-        return $this->hasMany(User::class);
+        return $this->belongsTo(User::class);
     }
 
-    /**
-     * Get all of the absent for the Rombel
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
     public function absent()
     {
-        return $this->hasMany(Absent::class);
+        return $this->belongsTo(Absent::class);
     }
 }

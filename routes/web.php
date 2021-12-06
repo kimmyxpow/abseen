@@ -1,12 +1,15 @@
 <?php
 
+use App\Http\Controllers\AbsentController;
 use App\Http\Controllers\AdministratorController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RayonController;
 use App\Http\Controllers\RombelController;
 use App\Http\Controllers\StudentsController;
 use App\Http\Controllers\TeacherController;
+use App\Models\Absent;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -43,7 +46,11 @@ Route::middleware('auth')->group(function () {
 
     //? Tampilan Dashboard
     Route::get('/dashboard', function () {
-        return view('dashboard.index');
+        $limitData = 8;
+
+        return view('dashboard.index', [
+            'data' => (Auth::user()->role == 'Siswa') ? Absent::where('rombel_id', Auth::user()->rombel_id)->orWhere('rayon_id', Auth::user()->rayon_id)->paginate($limitData) : []
+        ])->with('i', (request()->input('page', 1) - 1) * $limitData);
     })->name('dashboard');
 
     //! End Dahboard
@@ -125,7 +132,7 @@ Route::middleware('auth')->group(function () {
 
     //! Admin
 
-    //? Menampilkan data guru
+    //? Menampilkan data admin
     Route::get('/dashboard/user/admin', [AdministratorController::class, 'index'])->name('admin.index');
     //? Menampilkan form tambah admin
     Route::get('/dashboard/user/admin/create', [AdministratorController::class, 'create'])->name('admin.create');
@@ -141,4 +148,26 @@ Route::middleware('auth')->group(function () {
     Route::post('/dashboard/user/admin/{user:id}/delete', [AdministratorController::class, 'destroy'])->name('admin.destroy');
 
     //! End Admin
+
+    //! Absensi
+
+    //? Menampilkan data absen
+    Route::get('/dashboard/absensi', [AbsentController::class, 'index'])->name('absent.index');
+    //? Fungsi untuk menambah data absensi
+    Route::post('/dashboard/absensi/create', [AbsentController::class, 'store'])->name('absent.store');
+    //? Menampilkan form edit absensi
+    Route::get('/dashboard/absensi/{absent:id}/edit', [AbsentController::class, 'edit'])->name('absent.edit');
+    //? Fungsi untuk mengubah data absensi
+    Route::post('/dashboard/absensi/{absent:id}/edit', [AbsentController::class, 'update'])->name('absent.update');
+    //? Fungsi untuk mengambil data absensi
+    Route::get('/dashboard/absensi/{absent:id}', [AbsentController::class, 'show'])->name('absent.show');
+    //? Fungsi untuk menghapus data absensi
+    Route::post('/dashboard/absensi/{absent:id}/delete', [AbsentController::class, 'destroy'])->name('absent.destroy');
+     //? Menampilkan data kehadiran absensi
+    Route::get('/dashboard/absensi/{absent:id}/siswa', [AbsentController::class, 'student'])->name('absent.student');
+
+    Route::post('/dashboard/absensi/{absent:id}/hadir', [AbsentController::class, 'present'])->name('absent.present');
+    Route::post('/dashboard/absensi/{absent:id}/pulang', [AbsentController::class, 'goHome'])->name('absent.goHome');
+
+    //! End Absensi
 });

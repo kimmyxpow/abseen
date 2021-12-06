@@ -15,6 +15,14 @@ class CreateAbsentsTable extends Migration
     {
         Schema::create('absents', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->unsignedBigInteger('rombel_id')->nullable();
+            $table->unsignedBigInteger('rayon_id')->nullable();
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->foreign('rombel_id')->references('id')->on('rombels')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreign('rayon_id')->references('id')->on('rayons')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreign('user_id')->references('id')->on('users')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->string('date');
             $table->timestamps();
         });
     }

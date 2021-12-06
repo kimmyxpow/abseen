@@ -36,9 +36,6 @@ class DatabaseSeeder extends Seeder
 
         User::create([
             'name' => 'Abi Noval Fauzi',
-            'nis' => '12007616',
-            'rombel_id' => 1,
-            'rayon_id' => 1,
             'username' => 'anf612',
             'email' => 'abinovalfauzi@smkwikrama.sch.id',
             'password' => bcrypt('password'),

@@ -68,4 +68,20 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Rombel::class);
     }
+
+
+    /**
+     * Get all of the absent for the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function absent()
+    {
+        return $this->hasMany(Absent::class);
+    }
+
+    public function presence()
+    {
+        return $this->hasMany(Presence::class);
+    }
 }

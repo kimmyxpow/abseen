@@ -19,7 +19,7 @@ class AdministratorController extends Controller
      */
     public function index()
     {
-        return view('dashboard.user.admin.index', [
+        return view('dashboard.absensi.index', [
             'data' => User::where('role', 'Admin')->orderBy('name')->paginate($this->limitData)
         ])->with('i', (request()->input('page', 1) - 1) * $this->limitData);
     }
