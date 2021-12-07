@@ -199,7 +199,7 @@
                document.querySelector('#loader').style.pointerEvents = 'auto';
 
                const id = this.dataset.id;
-               fetch('http://lara-absensi.test/dashboard/rayon/' + id + '/edit', {
+               fetch('/dashboard/rayon/' + id + '/edit', {
                      method: 'GET',
                      headers: {
                         'Content-Type': 'application/json',
@@ -229,7 +229,7 @@
                document.querySelector('#loader').style.pointerEvents = 'auto';
 
                const id = this.dataset.id;
-               fetch('http://lara-absensi.test/dashboard/rayon/' + id, {
+               fetch('/dashboard/rayon/' + id, {
                      method: 'GET',
                      headers: {
                         'Content-Type': 'application/json',

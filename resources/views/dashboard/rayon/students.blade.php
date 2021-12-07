@@ -63,9 +63,6 @@
                      <th class="border-0">NIS</th>
                      <th class="border-0">Email</th>
                      <th class="border-0">Rombel</th>
-                     @if (Auth::user()->role == 'Admin')
-                        <th class="border-0 rounded-end">Action</th>
-                     @endif
                   </tr>
                </thead>
                <tbody>
@@ -90,15 +87,6 @@
                         <td class="fw-bold">
                            {{ $row->rombel->name }}
                         </td>
-                        @if (Auth::user()->role == 'Admin')
-                           <td>
-                              <button type="button" data-id="{{ $row->id }}" class="btn btn-warning btn-edit"
-                                 href="#">Edit</button>
-                              <button type="button" data-id="{{ $row->id }}" data-bs-toggle="modal"
-                                 data-bs-target="#modal-notification" class="btn btn-danger btn-delete"
-                                 href="#">Hapus</button>
-                           </td>
-                        @endif
                      </tr>
                   @endforeach
                </tbody>
@@ -106,89 +94,4 @@
          </div>
       </div>
    </div>
-   <div class="modal fade" id="modal-notification" tabindex="-1" role="dialog"
-      aria-labelledby="modal-notification" aria-hidden="true">
-      <div class="modal-dialog modal-danger modal-dialog-centered" role="document">
-         <div class="modal-content bg-gradient-secondary">
-            <button type="button" class="btn-close theme-settings-close fs-6 ms-auto" style="z-index: 5;"
-               data-bs-dismiss="modal"
-               aria-label="Close"></button>
-            <div class="modal-body text-white">
-               <div class="py-3 text-center">
-                  <span class="modal-icon">
-                     <svg class="icon icon-xl text-gray-200" fill="currentColor" viewBox="0 0 20 20"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path
-                           d="M8.707 7.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l2-2a1 1 0 00-1.414-1.414L11 7.586V3a1 1 0 10-2 0v4.586l-.293-.293z">
-                        </path>
-                        <path
-                           d="M3 5a2 2 0 012-2h1a1 1 0 010 2H5v7h2l1 2h4l1-2h2V5h-1a1 1 0 110-2h1a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V5z">
-                        </path>
-                     </svg>
-                  </span>
-                  <h2 class="h4 modal-title my-3">Important message!</h2>
-                  <p>
-                     Apakah kamu yakin ingin menghapus rombel ini? Data 50 siswa yang terdaftar ke rombel ini juga akan
-                     terhapus!
-                  </p>
-               </div>
-            </div>
-            <form class="modal-footer" method="POST" id="form-delete">
-               @csrf
-               @method('DELETE')
-               <button type="submit" class="btn btn-sm btn-white">Tetap Hapus</button>
-            </form>
-         </div>
-      </div>
-   </div>
-   <script>
-      document.addEventListener("DOMContentLoaded", function() {
-
-         document.querySelectorAll('.btn-edit').forEach(btn => {
-            btn.addEventListener('click', function() {
-               const id = this.dataset.id;
-               fetch('http://lara-absensi.test/dashboard/rombel/' + id + '/edit', {
-                     method: 'GET', // or 'PUT'
-                     headers: {
-                        'Content-Type': 'application/json',
-                     }
-                  })
-                  .then(response => response.json())
-                  .then(data => {
-                     document.querySelector('#input-crud input').value = data.name;
-                     document.querySelector('#card-edit').classList.remove('d-none');
-                     document.querySelector('#card-edit').classList.add('d-block');
-                     document.querySelector('#form-crud').setAttribute('action',
-                        '/dashboard/rombel/' + id);
-                  })
-                  .catch((error) => {
-                     console.error('Error:', error);
-                  });
-            })
-         });
-
-         document.querySelectorAll('.btn-delete').forEach(btn => {
-            btn.addEventListener('click', function() {
-               const id = this.dataset.id;
-               fetch('http://lara-absensi.test/dashboard/rombel/' + id, {
-                     method: 'GET', // or 'PUT'
-                     headers: {
-                        'Content-Type': 'application/json',
-                     }
-                  })
-                  .then(response => response.json())
-                  .then(data => {
-                     document.querySelector('#modal-notification p').innerHTML =
-                        `Apakah kamu yakin ingin menghapus rombel ini? Data ${data.count} siswa yang terdaftar ke rombel ini juga akan terhapus!`;
-                     document.querySelector('#form-delete').setAttribute('action',
-                        '/dashboard/rombel/' + data[0].id);
-                  })
-                  .catch((error) => {
-                     console.error('Error:', error);
-                  });
-            })
-         });
-
-      });
-   </script>
 @endsection

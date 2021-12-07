@@ -67,9 +67,7 @@
                      <th class="border-0">Untuk</th>
                      <th class="border-0">Oleh</th>
                      <th class="border-0">Dibuat Di</th>
-                     @if (Auth::user()->role == 'Admin')
-                        <th class="border-0 rounded-end">Action</th>
-                     @endif
+                     <th class="border-0 rounded-end">Action</th>
                   </tr>
                </thead>
                <tbody>
@@ -100,6 +98,11 @@
                                  <button type="button" data-id="{{ $row->id }}" data-bs-toggle="modal"
                                     data-bs-target="#modal-notification" class="btn btn-danger btn-delete"
                                     href="#">Hapus</button>
+                              </td>
+                           @else
+                              <td>
+                                 <a href="/dashboard/absensi/{{ $row->id }}/siswa" class="btn btn-info"
+                                    href="#">Detail</a>
                               </td>
                            @endif
                         </tr>
@@ -167,7 +170,7 @@
                document.querySelector('#loader').style.pointerEvents = 'auto';
 
                const id = this.dataset.id;
-               fetch('http://lara-absensi.test/dashboard/absensi/' + id, {
+               fetch('/dashboard/absensi/' + id, {
                      method: 'GET',
                      headers: {
                         'Content-Type': 'application/json',

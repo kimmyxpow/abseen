@@ -54,7 +54,7 @@ class StudentsController extends Controller
             'rombel' => ['required'],
             'rayon' => ['required'],
             'username' => ['required', 'min:5', 'max:15', 'string', 'unique:users'],
-            'email' => ['required', 'max:255', 'email:dns', 'unique:users'],
+            'email' => ['required', 'max:255', 'email', 'unique:users'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'avatar' => ['nullable', 'file', 'image', 'max:2048'],
         ]);
@@ -69,6 +69,8 @@ class StudentsController extends Controller
 
         //? Menentukan role user
         $validatedData['role'] = 'Siswa';
+
+        $validatedData['password'] = bcrypt($request->password);
 
         //? Menambah field 
         $validatedData['rombel_id'] = $validatedData['rombel'];
@@ -129,27 +131,21 @@ class StudentsController extends Controller
         ];
 
         //? Menambah Validasi Password Jika Admin Menambah Password Baru
-        if (!is_null($request->password)) {
-            $rules['password'] = ['confirmed', Rules\Password::defaults()];
-        }
+        if (!is_null($request->password)) $rules['password'] = ['confirmed', Rules\Password::defaults()];
 
         //? Menambah Validasi NIS Jika Admin Mengubah NIS Siswa
-        if ($request->nis != $user->nis) {
-            $rules['nis'] = ['required', 'numeric', 'unique:users'];
-        }
+        if ($request->nis != $user->nis) $rules['nis'] = ['required', 'numeric', 'unique:users'];
 
         //? Menambah Validasi Username Jika Admin Mengubah Username Siswa
-        if ($request->username != $user->username) {
-            $rules['username'] = ['required', 'min:5', 'max:15', 'string', 'unique:users'];
-        }
+        if ($request->username != $user->username) $rules['username'] = ['required', 'min:5', 'max:15', 'string', 'unique:users'];
 
         //? Menambah Validasi Email Jika Admin Mengubah Email Siswa
-        if ($request->email != $user->email) {
-            $rules['email'] = ['required', 'max:255', 'email:dns', 'unique:users'];
-        }
+        if ($request->email != $user->email) $rules['email'] = ['required', 'max:255', 'email', 'unique:users'];
 
         //? Validasi input
         $validatedData = $request->validate($rules);
+
+        if (!is_null($request->password)) $validatedData['password'] = bcrypt($request->password);
 
         //? Cek jika ada avatar baru
         if (!is_null($request->avatar)) {

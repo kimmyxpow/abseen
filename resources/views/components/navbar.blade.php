@@ -64,19 +64,19 @@
             </a>
          </li>
          @if (Auth::user()->role != 'Siswa')
-            <li class="nav-item {{ Route::is('absent.index') || Route::is('absent.create') || Route::is('absent.edit') || Route::is('absent.student') ? 'active' : '' }}">
+            <li class="nav-item {{ Route::is('absent*') ? 'active' : '' }}">
                <a href="/dashboard/absensi" class="nav-link d-flex align-items-center">
                   <ion-icon name="hand-right-outline" class="fs-5 me-3"></ion-icon>
                   <span class="sidebar-text">Absensi</span>
                </a>
             </li>
-            <li class="nav-item {{ Route::is('rayon.index') || Route::is('rayon.students') ? 'active' : '' }}">
+            <li class="nav-item {{ Route::is('rayon*') ? 'active' : '' }}">
                <a href="/dashboard/rayon" class="nav-link d-flex align-items-center">
                   <ion-icon name="compass-outline" class="fs-5 me-3"></ion-icon>
                   <span class="sidebar-text">Rayon</span>
                </a>
             </li>
-            <li class="nav-item {{ Route::is('rombel.index') || Route::is('rombel.students') ? 'active' : '' }}">
+            <li class="nav-item {{ Route::is('rombel*') ? 'active' : '' }}">
                <a href="/dashboard/rombel" class="nav-link d-flex align-items-center">
                   <ion-icon name="ribbon-outline" class="fs-5 me-3"></ion-icon>
                   <span class="sidebar-text">Rombel</span>

@@ -2,11 +2,11 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\Auth;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
-class AdminMiddleware
+class AdministratorMiddleware
 {
     /**
      * Handle an incoming request.
@@ -17,7 +17,7 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        if (Auth::user()->role == 'Admin') {
+        if (Auth::user()->role == 'Guru' || Auth::user()->role == 'Admin') {
             return $next($request);
         } else {
             return redirect('/dashboard');

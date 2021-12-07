@@ -46,7 +46,7 @@ class TeacherController extends Controller
         $validatedData = $request->validate([
             'name' => ['required', 'max:255', 'string'],
             'username' => ['required', 'min:5', 'max:15', 'string', 'unique:users'],
-            'email' => ['required', 'max:255', 'email:dns', 'unique:users'],
+            'email' => ['required', 'max:255', 'email', 'unique:users'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'avatar' => ['nullable', 'file', 'image', 'max:2048'],
         ]);
@@ -61,6 +61,8 @@ class TeacherController extends Controller
 
         //? Menentukan role user
         $validatedData['role'] = 'Guru';
+
+        $validatedData['password'] = bcrypt($request->password);
 
         //? Memasukkan data ke dalam database
         User::create($validatedData);
@@ -109,22 +111,18 @@ class TeacherController extends Controller
         ];
 
         //? Menambah Validasi Password Jika Admin Menambah Password Baru
-        if (!is_null($request->password)) {
-            $rules['password'] = ['confirmed', Rules\Password::defaults()];
-        }
+        if (!is_null($request->password))  $rules['password'] = ['confirmed', Rules\Password::defaults()];
 
         //? Menambah Validasi Username Jika Admin Mengubah Username Siswa
-        if ($request->username != $user->username) {
-            $rules['username'] = ['required', 'min:5', 'max:15', 'string', 'unique:users'];
-        }
+        if ($request->username != $user->username)  $rules['username'] = ['required', 'min:5', 'max:15', 'string', 'unique:users'];
 
         //? Menambah Validasi Email Jika Admin Mengubah Email Siswa
-        if ($request->email != $user->email) {
-            $rules['email'] = ['required', 'max:255', 'email:dns', 'unique:users'];
-        }
+        if ($request->email != $user->email) $rules['email'] = ['required', 'max:255', 'email', 'unique:users'];
 
         //? Validasi input
         $validatedData = $request->validate($rules);
+
+        if (!is_null($request->password)) $validatedData['password'] = bcrypt($request->password);
 
         //? Cek jika ada avatar baru
         if (!is_null($request->avatar)) {

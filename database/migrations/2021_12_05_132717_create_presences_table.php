@@ -21,7 +21,7 @@ class CreatePresencesTable extends Migration
             $table->foreign('user_id')->references('id')->on('users')->cascadeOnUpdate()->cascadeOnDelete();
             $table->boolean('is_present');
             $table->string('present');
-            $table->string('datang')->nullable();
+            $table->string('absen')->nullable();
             $table->string('pulang')->nullable();
             $table->text('description')->nullable();
             $table->string('proof')->nullable();

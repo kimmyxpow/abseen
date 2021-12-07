@@ -6,10 +6,10 @@ use App\Models\Absent;
 use App\Models\Presence;
 use App\Models\Rayon;
 use App\Models\Rombel;
-use Carbon\Carbon;
-use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Validation\Rule;
 
 class AbsentController extends Controller
 {
@@ -84,6 +84,7 @@ class AbsentController extends Controller
         }
 
         $validatedData['user_id'] = Auth::id();
+        $validatedData['date'] = date('Y-m-d');
 
         Absent::create($validatedData);
 
@@ -109,6 +110,10 @@ class AbsentController extends Controller
      */
     public function edit(Absent $absent)
     {
+        if (!Gate::allows('update-absensi', $absent)) {
+            abort(403);
+        }
+        
         return view('dashboard.absensi.edit', [
             'data' => $absent
         ]);
@@ -123,6 +128,10 @@ class AbsentController extends Controller
      */
     public function update(Request $request, Absent $absent)
     {
+        if (!Gate::allows('update-absensi', $absent)) {
+            abort(403);
+        }
+
         $request->validate([
             'name' => ['required', 'string']
         ]);
@@ -154,7 +163,7 @@ class AbsentController extends Controller
         Presence::create([
             'absent_id' => $absentId,
             'user_id' => $userId,
-            'datang' => $datang,
+            'absen' => $datang,
             'is_present' => true,
             'present' => 'Hadir'
         ]);
@@ -179,5 +188,38 @@ class AbsentController extends Controller
             'data' => $absent,
             'siswa' => Presence::where('absent_id', $absent->id)->get()
         ])->with('i', 0);
+    }
+
+    public function permission(Absent $absent)
+    {
+        return view('dashboard.absensi.permission', [
+            'data' => $absent
+        ]);
+    }
+
+    public function attendance(Request $request, Absent $absent)
+    {
+        $rules = [
+            'present' => ['required', Rule::in(['Sakit', 'Izin'])],
+            'description' => ['required'],
+            'proof' => ['required', 'file', 'image', 'max:2048']
+        ];
+
+        $validatedData = $request->validate($rules);
+
+        $validatedData['absent_id'] = $absent->id;
+        $validatedData['user_id'] = Auth::id();
+        $validatedData['is_present'] = false;
+        $validatedData['absen'] = date('H:i');
+        $validatedData['proof'] = '/' . $request->file('proof')->store('img/bukti-izin', 'to-public');
+
+        Presence::create($validatedData);
+
+        return redirect('/dashboard')->with('success', 'Data Berhasil Tersimpan!');
+    }
+
+    public function proof(Presence $presence)
+    {
+        return $presence;
     }
 }

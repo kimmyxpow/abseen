@@ -22,9 +22,11 @@
       </nav>
       <div class="d-flex justify-content-between align-items-center w-100 flex-wrap">
          <h1 class="h4 mb-3 mb-lg-0">Data Admin</h1>
-         <a href="/dashboard/user/admin/create" class="btn btn-primary">
-            &plus; Tambah
-         </a>
+         @if (Auth::user()->role == 'Admin')
+            <a href="/dashboard/user/admin/create" class="btn btn-primary">
+               &plus; Tambah
+            </a>
+         @endif
       </div>
    </div>
 @endsection
