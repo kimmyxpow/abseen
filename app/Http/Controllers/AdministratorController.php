@@ -53,7 +53,7 @@ class AdministratorController extends Controller
 
         //? Cek jika avatar tidak diisi maka gunakan avatar default
         if (is_null($request->avatar)) {
-            $validatedData['avatar'] = '/img/default/avatar/' . substr($request->name, 0, 1) . '.png';
+            $validatedData['avatar'] = '/img/avatar/' . substr($request->name, 0, 1) . '.png';
         } else {
             $validatedData['avatar'] = '/' . $request->file('avatar')->store('img/avatar/upload', 'to-public');
             $validatedData['is_edited'] = true;
