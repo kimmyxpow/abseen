@@ -38,21 +38,27 @@ Route::middleware('guest')->prefix('login')->group(function () {
 
 //? Route yang hanya bisa di akses setelah Login
 Route::middleware('auth')->group(function () {
-    //? Tampilan Dashboard
-    Route::get('/dashboard', function () {
-        $limitData = 8;
-
-        return view('dashboard.index', [
-            'data' => (Auth::user()->role == 'Siswa') ?
-                Absent::where('rombel_id', Auth::user()->rombel_id)->orWhere('rayon_id', Auth::user()->rayon_id)->where('date', date('Y-m-d'))->paginate($limitData) :
-                Absent::where('date', date('Y-m-d'))->paginate($limitData)
-        ])->with('i', paginationNumber($limitData));
-    })->name('dashboard');
-
     //? Fungsi untuk Logout
     Route::post('/logout', [AuthController::class, 'destroy'])->name('logout');
 
     Route::prefix('dashboard')->group(function () {
+        //? Tampilan Dashboard
+        Route::get('/', function () {
+            $limitData = 8;
+
+            return view('dashboard.index', [
+                'data' => (Auth::user()->role == 'Siswa') ?
+                    Absent::where('date', date('Y-m-d'))
+                    ->where(
+                        fn ($query) => $query
+                            ->where('rombel_id', Auth::user()->rombel_id)
+                            ->orWhere('rayon_id', Auth::user()->rayon_id)
+                    )
+                    ->paginate($limitData) :
+                    Absent::where('date', date('Y-m-d'))->paginate($limitData)
+            ])->with('i', paginationNumber($limitData));
+        })->name('dashboard');
+
         //? Hanya bisa di akses oleh administrator (admin & guru)
         Route::middleware('admin')->group(function () {
             //? Menampilkan resource rombel
