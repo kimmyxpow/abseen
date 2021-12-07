@@ -48,8 +48,10 @@ Route::middleware('auth')->group(function () {
             $limitData = 8;
 
             return view('dashboard.index', [
-                'data' => (Auth::user()->role == 'Siswa') ? Absent::where('rombel_id', Auth::user()->rombel_id)->orWhere('rayon_id', Auth::user()->rayon_id)->where('date', date('Y-m-d'))->paginate($limitData) : Absent::where('date', date('Y-m-d'))->paginate($limitData)
-            ])->with('i', (request()->input('page', 1) - 1) * $limitData);
+                'data' => (Auth::user()->role == 'Siswa') ?
+                    Absent::where('rombel_id', Auth::user()->rombel_id)->orWhere('rayon_id', Auth::user()->rayon_id)->where('date', date('Y-m-d'))->paginate($limitData) :
+                    Absent::where('date', date('Y-m-d'))->paginate($limitData)
+            ])->with('i', paginationNumber($limitData));
         })->name('dashboard');
 
         //? Menampilkan resource rombel
@@ -63,8 +65,9 @@ Route::middleware('auth')->group(function () {
         Route::get('/rayon/{rayon:id}/siswa', [RayonController::class, 'students'])->name('rayon.students');
 
         Route::prefix('user')->group(function () {
+            //? Menampilkan data semua user
             Route::get('/', function () {
-                $limitData = 8;
+                $limitData = 80;
 
                 return view('dashboard.user.index', [
                     'data' => User::orderBy('name')->paginate($limitData)
