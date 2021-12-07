@@ -38,22 +38,22 @@ Route::middleware('guest')->prefix('login')->group(function () {
 
 //? Route yang hanya bisa di akses setelah Login
 Route::middleware('auth')->group(function () {
+    //? Tampilan Dashboard
+    Route::get('/dashboard', function () {
+        $limitData = 8;
+
+        return view('dashboard.index', [
+            'data' => (Auth::user()->role == 'Siswa') ?
+                Absent::where('rombel_id', Auth::user()->rombel_id)->orWhere('rayon_id', Auth::user()->rayon_id)->where('date', date('Y-m-d'))->paginate($limitData) :
+                Absent::where('date', date('Y-m-d'))->paginate($limitData)
+        ])->with('i', paginationNumber($limitData));
+    })->name('dashboard');
+
     //? Fungsi untuk Logout
     Route::post('/logout', [AuthController::class, 'destroy'])->name('logout');
 
     //? Hanya bisa di akses oleh administrator (admin & guru)
     Route::middleware('admin')->prefix('dashboard')->group(function () {
-        //? Tampilan Dashboard
-        Route::get('/', function () {
-            $limitData = 8;
-
-            return view('dashboard.index', [
-                'data' => (Auth::user()->role == 'Siswa') ?
-                    Absent::where('rombel_id', Auth::user()->rombel_id)->orWhere('rayon_id', Auth::user()->rayon_id)->where('date', date('Y-m-d'))->paginate($limitData) :
-                    Absent::where('date', date('Y-m-d'))->paginate($limitData)
-            ])->with('i', paginationNumber($limitData));
-        })->name('dashboard');
-
         //? Menampilkan resource rombel
         Route::resource('/rombel', RombelController::class);
         //? Menampilkan siswa per-rombel
@@ -145,15 +145,15 @@ Route::middleware('auth')->group(function () {
             Route::get('/{presence:id}/bukti', [AbsentController::class, 'proof'])->name('absent.proof');
         });
     });
+});
 
-    Route::middleware('student')->prefix('absensi')->group(function () {
-        //? Fungsi untuk mengisi 'hadir' siswa
-        Route::post('/{absent:id}/hadir', [AbsentController::class, 'present'])->name('absent.present');
-        //? Fungsi untuk mengisi 'pulang' siswa
-        Route::post('/{absent:id}/pulang', [AbsentController::class, 'goHome'])->name('absent.goHome');
-        //? Menampilkan form izin tidak hadir siswa
-        Route::get('/{absent:id}/izin', [AbsentController::class, 'permission'])->name('absent.permission');
-        //? Fungsi untuk menyimpan data izin tidak hadir siswa
-        Route::post('/{absent:id}/izin', [AbsentController::class, 'attendance'])->name('absent.attendance');
-    });
+Route::middleware('student')->prefix('dashboard')->group(function () {
+   //? Fungsi untuk mengisi 'hadir' siswa
+   Route::post('/absensi/{absent:id}/hadir', [AbsentController::class, 'present'])->name('absent.present');
+   //? Fungsi untuk mengisi 'pulang' siswa
+   Route::post('/absensi/{absent:id}/pulang', [AbsentController::class, 'goHome'])->name('absent.goHome');
+   //? Menampilkan form izin tidak hadir siswa
+   Route::get('/absensi/{absent:id}/izin', [AbsentController::class, 'permission'])->name('absent.permission');
+   //? Fungsi untuk menyimpan data izin tidak hadir siswa
+   Route::post('/absensi/{absent:id}/izin', [AbsentController::class, 'attendance'])->name('absent.attendance');
 });
