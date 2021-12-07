@@ -62,7 +62,7 @@ Route::middleware('auth')->group(function () {
 
     //! End Logout
 
-    Route::middleware(['admin', 'auth'])->group(function () {
+    Route::middleware('admin')->group(function () {
         //! Rombel
 
         //? Menampilkan resource rombel
@@ -166,6 +166,15 @@ Route::middleware('auth')->group(function () {
         Route::post('/dashboard/absensi/{absent:id}/delete', [AbsentController::class, 'destroy'])->name('absent.destroy');
         //? Menampilkan data kehadiran absensi
         Route::get('/dashboard/absensi/{absent:id}/siswa', [AbsentController::class, 'student'])->name('absent.student');
+        //? Menampilkan bukti izin tidak hadir siswa
+        Route::get('/dashboard/absensi/{presence:id}/bukti', [AbsentController::class, 'proof'])->name('absent.proof');
+
+        //! End Absensi
+    });
+
+    Route::middleware('student')->group(function () {
+        //! Absensi untuk siswa
+
         //? Fungsi untuk mengisi 'hadir' siswa
         Route::post('/dashboard/absensi/{absent:id}/hadir', [AbsentController::class, 'present'])->name('absent.present');
         //? Fungsi untuk mengisi 'pulang' siswa
@@ -174,9 +183,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/dashboard/absensi/{absent:id}/izin', [AbsentController::class, 'permission'])->name('absent.permission');
         //? Fungsi untuk menyimpan data izin tidak hadir siswa
         Route::post('/dashboard/absensi/{absent:id}/izin', [AbsentController::class, 'attendance'])->name('absent.attendance');
-        //? Menampilkan bukti izin tidak hadir siswa
-        Route::get('/dashboard/absensi/{presence:id}/bukti', [AbsentController::class, 'proof'])->name('absent.proof');
 
-        //! End Absensi
+        //! End absensi untuk siswa
     });
 });

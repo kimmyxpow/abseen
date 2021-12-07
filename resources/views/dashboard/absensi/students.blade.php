@@ -122,6 +122,8 @@
             </div>
             <div class="modal-body">
                <img class="w-100 img-proof" src="" alt="">
+               <h2 class="h4 modal-title mt-3 mb-1">Keterangan</h2>
+               <p class="text-description"></p>
             </div>
          </div>
       </div>
@@ -152,6 +154,7 @@
                   .then(response => response.json())
                   .then(data => {
                      document.querySelector('.img-proof').src = data.proof;
+                     document.querySelector('.text-description').innerHTML = data.description;
 
                      document.querySelector('#loader').style.opacity = 0;
                      document.querySelector('#loader').style.pointerEvents = 'none';
