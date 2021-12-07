@@ -53,7 +53,7 @@
          </div>
       </div>
       <div class="card-body">
-         <div class="table-responsive">
+         <div class="table-responsive mb-3">
             <table class="table table-centered table-nowrap mb-0 rounded">
                <thead class="thead-light">
                   <tr>
@@ -92,6 +92,7 @@
                </tbody>
             </table>
          </div>
+         {{ $data->links() }}
       </div>
    </div>
 @endsection

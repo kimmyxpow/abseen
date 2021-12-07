@@ -19,8 +19,8 @@ class CreatePresencesTable extends Migration
             $table->unsignedBigInteger('user_id')->nullable();
             $table->foreign('absent_id')->references('id')->on('absents')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreign('user_id')->references('id')->on('users')->cascadeOnUpdate()->cascadeOnDelete();
-            $table->boolean('is_present');
-            $table->string('present');
+            $table->boolean('is_present')->default(false);
+            $table->string('present')->default('Belum Absen');
             $table->string('absen')->nullable();
             $table->string('pulang')->nullable();
             $table->text('description')->nullable();

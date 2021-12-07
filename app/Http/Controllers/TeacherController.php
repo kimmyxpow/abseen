@@ -21,7 +21,7 @@ class TeacherController extends Controller
     {
         return view('dashboard.user.teacher.index', [
             'data' => User::where('role', 'Guru')->orderBy('name')->paginate($this->limitData)
-        ])->with('i', (request()->input('page', 1) - 1) * $this->limitData);
+        ])->with('i', paginationNumber($this->limitData));
     }
 
     /**
@@ -55,7 +55,7 @@ class TeacherController extends Controller
         if (is_null($request->avatar)) {
             $validatedData['avatar'] = '/img/avatar/' . substr($request->name, 0, 1) . '.png';
         } else {
-            $validatedData['avatar'] = '/' . $request->file('avatar')->store('img/avatar/upload', 'to-public');
+            $validatedData['avatar'] = '/' . $request->file('avatar')->store('img/avatar/upload');
             $validatedData['is_edited'] = true;
         }
 
@@ -127,7 +127,7 @@ class TeacherController extends Controller
         //? Cek jika ada avatar baru
         if (!is_null($request->avatar)) {
             //? Simpan avatar baru
-            $validatedData['avatar'] = '/' . $request->file('avatar')->store('img/avatar/upload', 'to-public');
+            $validatedData['avatar'] = '/' . $request->file('avatar')->store('img/avatar/upload');
             $validatedData['is_edited'] = true;
 
             //? Cek apakah avatar siswa adalah avatar default atau bukan

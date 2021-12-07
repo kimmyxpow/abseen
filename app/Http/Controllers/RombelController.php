@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 class RombelController extends Controller
 {
     //? Maksimal data (pagination)
-    protected $limitData = 8;
+    protected $limitData = 20;
 
     /**
      * Display a listing of the resource.
@@ -21,7 +21,7 @@ class RombelController extends Controller
     {
         return view('dashboard.rombel.index', [
             'data' => Rombel::orderBy('name')->paginate($this->limitData),
-        ])->with('i', (request()->input('page', 1) - 1) * $this->limitData);
+        ])->with('i', paginationNumber($this->limitData));
     }
 
     /**
@@ -104,8 +104,8 @@ class RombelController extends Controller
     public function students(Rombel $rombel)
     {
         return view('dashboard.rombel.students', [
-            'data' => User::where('rombel_id', $rombel->id)->where('role', 'Siswa')->paginate($this->limitData),
+            'data' => User::where('rombel_id', $rombel->id)->where('role', 'Siswa')->orderBy('name')->paginate($this->limitData),
             'rombel' => $rombel
-        ])->with('i', (request()->input('page', 1) - 1) * $this->limitData);
+        ])->with('i', paginationNumber($this->limitData));
     }
 }

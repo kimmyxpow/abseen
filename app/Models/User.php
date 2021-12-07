@@ -27,7 +27,8 @@ class User extends Authenticatable
         'password',
         'role',
         'avatar',
-        'is_edited'
+        'is_edited',
+        'hash'
     ];
 
     /**

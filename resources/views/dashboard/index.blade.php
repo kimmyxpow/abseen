@@ -63,21 +63,19 @@
                            <td class="btn-column">
                               @if (Auth::user()->role == 'Siswa')
                                  @if (count($row->presence->where('user_id', Auth::id())))
-                                    @if (is_null($row->presence->Where('user_id', Auth::id())[0]->absen))
+                                    @if (is_null($row->presence->firstWhere('user_id', Auth::id())->absen))
                                        <form action="/dashboard/absensi/{{ $row->id }}/hadir" method="POST" class="d-inline-block">
                                           @csrf
                                           <button type="submit" data-id="{{ $row->id }}"
                                              class="btn btn-primary btn-hadir">Hadir!</button>
                                        </form>
-                                       <button type="button" data-id="{{ $row->id }}"
-                                          class="btn btn-warning btn-izin">Izin</button>
-                                       <button type="button" data-id="{{ $row->id }}"
-                                          class="btn btn-info btn-sakit">Sakit</button>
+                                       <a href="/dashboard/absensi/{{ $row->id }}/izin" data-id="{{ $row->id }}"
+                                          class="btn btn-warning btn-izin">Tidak Hadir</a>
                                     @else
-                                       @if (is_null($row->presence->where('user_id', Auth::id())[0]->pulang))
-                                          @if ($row->presence->where('user_id', Auth::id())[0]->is_present == false)
+                                       @if (is_null($row->presence->firstWhere('user_id', Auth::id())->pulang))
+                                          @if ($row->presence->firstWhere('user_id', Auth::id())->is_present == false)
                                              <button type="button" data-id="{{ $row->id }}"
-                                                class="btn btn-primary btn-hadir" disabled>Absen : {{ $row->presence->where('user_id', Auth::id())[0]->absen }}</button>
+                                                class="btn btn-primary btn-hadir" disabled>Absen : {{ $row->presence->firstWhere('user_id', Auth::id())->absen }}</button>
                                           @else
                                              <button type="button" data-id="{{ $row->id }}"
                                                 class="btn btn-primary btn-hadir" disabled>Hadir!</button>
@@ -89,9 +87,9 @@
                                           @endif
                                        @else
                                           <button type="button" data-id="{{ $row->id }}"
-                                             class="btn btn-primary btn-hadir" disabled>Hadir : {{ $row->presence->Where('user_id', Auth::id())[0]->absen }}</button>
+                                             class="btn btn-primary btn-hadir" disabled>Hadir : {{ $row->presence->firstWhere('user_id', Auth::id())->absen }}</button>
                                           <button type="button" data-id="{{ $row->id }}"
-                                             class="btn btn-primary btn-info" disabled>Pulang : {{ $row->presence->Where('user_id', Auth::id())[0]->pulang }}</button>
+                                             class="btn btn-primary btn-info" disabled>Pulang : {{ $row->presence->firstWhere('user_id', Auth::id())->pulang }}</button>
                                        @endif
                                     @endif
                                  @else

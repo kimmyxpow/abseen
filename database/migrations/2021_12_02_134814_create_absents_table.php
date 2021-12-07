@@ -23,6 +23,7 @@ class CreateAbsentsTable extends Migration
             $table->foreign('rayon_id')->references('id')->on('rayons')->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreign('user_id')->references('id')->on('users')->cascadeOnUpdate()->cascadeOnDelete();
             $table->string('date');
+            $table->string('hash');
             $table->timestamps();
         });
     }

@@ -3,7 +3,6 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 
 class UserFactory extends Factory
 {
@@ -16,24 +15,15 @@ class UserFactory extends Factory
     {
         return [
             'name' => $this->faker->name(),
+            'nis' => $this->faker->unique()->randomNumber(8, true),
+            'rombel_id' => mt_rand(1, 45),
+            'rayon_id' => mt_rand(1, 15),
+            'username' => $this->faker->unique()->userName(),
             'email' => $this->faker->unique()->safeEmail(),
-            'email_verified_at' => now(),
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
-            'remember_token' => Str::random(10),
+            'password' => bcrypt('password'),
+            'role' => 'Siswa',
+            'hash' => md5(bcrypt($this->faker->unique()->safeEmail() . $this->faker->unique()->userName() . time() . uniqid())),
+            'avatar' => '/img/avatar/' . substr($this->faker->name(), 0, 1) . '.png'
         ];
-    }
-
-    /**
-     * Indicate that the model's email address should be unverified.
-     *
-     * @return \Illuminate\Database\Eloquent\Factories\Factory
-     */
-    public function unverified()
-    {
-        return $this->state(function (array $attributes) {
-            return [
-                'email_verified_at' => null,
-            ];
-        });
     }
 }

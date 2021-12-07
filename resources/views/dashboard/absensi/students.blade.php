@@ -77,23 +77,23 @@
                            {{ ++$i }}
                         </td>
                         <td>
-                           <img width="40" height="40" class="rounded-circle" src="{{ $row->user->avatar }}"
-                              alt="{{ $row->user->name }}">
+                           <img width="40" height="40" class="rounded-circle" src="{{ $row->avatar }}"
+                              alt="{{ $row->name }}">
                         </td>
                         <td class="fw-bold">
-                           {{ $row->user->name }}
+                           {{ $row->name }}
                         </td>
                         <td class="fw-bold">
-                           {{ $row->user->nis }}
+                           {{ $row->nis }}
                         </td>
                         <td class="fw-bold">
-                           {{ $row->user->email }}
+                           {{ $row->email }}
                         </td>
                         <td class="fw-bold">
-                           {{ $row->user->rayon->name }}
+                           {{ $row->rayon }}
                         </td>
                         <td class="fw-bold">
-                           {{ $row->user->rombel->name }}
+                           {{ $row->rombel }}
                         </td>
                         <td class="fw-bold">
                            {{ $row->absen ?? '-' }}
@@ -102,8 +102,11 @@
                            {{ $row->pulang ?? '-' }}
                         </td>
                         <td class="fw-bold">
-                           {!! ($row->is_present == false) ? '<button class="btn btn-primary btn-proof" data-bs-toggle="modal"
-                           data-bs-target="#modal-proof" data-id="' . $row->id . '">' . $row->present . '</button>' : $row->present !!}
+                           @if ($row->is_present == false && $row->present != 'Belum Absen')
+                              <span style="cursor: pointer;" class="badge bg-{{ ($row->present == 'Sakit') ? 'primary' : '' }}{{ ($row->present == 'Izin') ? 'info' : '' }} btn-proof" data-bs-toggle="modal" data-bs-target="#modal-proof" data-id="{{ $row->presence_id }}">{{ $row->present }}</span>
+                           @else
+                              <span class="badge bg-{{ ($row->present == 'Hadir') ? 'success' : '' }}{{ ($row->present == 'Belum Absen') ? 'danger' : '' }}">{{ $row->present }}</span>
+                           @endif
                         </td>
                      </tr>
                   @endforeach

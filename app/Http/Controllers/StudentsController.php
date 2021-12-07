@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Absent;
+use App\Models\Presence;
 use App\Models\Rayon;
 use App\Models\Rombel;
 use App\Models\User;
@@ -12,7 +14,7 @@ use Illuminate\Validation\Rules;
 class StudentsController extends Controller
 {
     //? Maksimal data (pagination)
-    protected $limitData = 8;
+    protected $limitData = 80;
 
     /**
      * Display a listing of the resource.
@@ -22,8 +24,8 @@ class StudentsController extends Controller
     public function index()
     {
         return view('dashboard.user.student.index', [
-            'data' => User::where('role', 'Siswa')->orderBy('nis')->paginate($this->limitData)
-        ])->with('i', (request()->input('page', 1) - 1) * $this->limitData);
+            'data' => User::where('role', 'Siswa')->orderBy('name')->paginate($this->limitData)
+        ])->with('i', paginationNumber($this->limitData));
     }
 
     /**
@@ -63,7 +65,7 @@ class StudentsController extends Controller
         if (is_null($request->avatar)) {
             $validatedData['avatar'] = '/img/avatar/' . substr($request->name, 0, 1) . '.png';
         } else {
-            $validatedData['avatar'] = '/' . $request->file('avatar')->store('img/avatar/upload', 'to-public');
+            $validatedData['avatar'] = '/' . $request->file('avatar')->store('img/avatar/upload');
             $validatedData['is_edited'] = true;
         }
 
@@ -80,8 +82,21 @@ class StudentsController extends Controller
         unset($validatedData['rombel']);
         unset($validatedData['rayon']);
 
+        $validatedData['hash'] = md5(bcrypt($validatedData['email'] . uniqid()));
+
+        $absent = Absent::where('rombel_id', $validatedData['rombel_id'])->orWhere('rayon_id', $validatedData['rayon_id'])->get();
+
         //? Memasukkan data ke dalam database
         User::create($validatedData);
+
+        if (count($absent)) {
+            foreach ($absent as $row) {
+                Presence::create([
+                    'absent_id' => $row->id,
+                    'user_id' => User::firstWhere('hash', $validatedData['hash'])->id,
+                ]);
+            }
+        }
 
         //? Redirect ke dashboard user dengan session success
         return redirect('/dashboard/user/siswa')->with('success', 'Berhasil Menambah Data Baru!');
@@ -150,7 +165,7 @@ class StudentsController extends Controller
         //? Cek jika ada avatar baru
         if (!is_null($request->avatar)) {
             //? Simpan avatar baru
-            $validatedData['avatar'] = '/' . $request->file('avatar')->store('img/avatar/upload', 'to-public');
+            $validatedData['avatar'] = '/' . $request->file('avatar')->store('img/avatar/upload');
             $validatedData['is_edited'] = true;
 
             //? Cek apakah avatar siswa adalah avatar default atau bukan
@@ -167,6 +182,14 @@ class StudentsController extends Controller
         //? Menghapus field
         unset($validatedData['rombel']);
         unset($validatedData['rayon']);
+
+        $presences = Presence::where('user_id', $user->id)->get();
+
+        if (count($presences)) {
+            foreach ($presences as $row) {
+                if ($row->absent->rombel_id != $validatedData['rombel_id'] || $row->absent->rayon_id != $validatedData['rayon_id'])  $row->delete();
+            }
+        }
 
         //? Mengubah data ke dalam database
         $user->update($validatedData);

@@ -17,7 +17,7 @@ class AdministratorMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        if (Auth::user()->role == 'Guru' || Auth::user()->role == 'Admin') {
+        if ((Auth::user()->role == 'Guru') || (Auth::user()->role == 'Admin')) {
             return $next($request);
         } else {
             return redirect('/dashboard');

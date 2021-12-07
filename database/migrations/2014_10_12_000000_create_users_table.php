@@ -28,6 +28,7 @@ class CreateUsersTable extends Migration
             $table->enum('role', ['Siswa', 'Guru', 'Admin']);
             $table->string('avatar');
             $table->boolean('is_edited')->default(false);
+            $table->string('hash');
             $table->rememberToken();
             $table->timestamps();
         });

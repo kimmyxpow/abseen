@@ -21,7 +21,7 @@ class RayonController extends Controller
     {
         return view('dashboard.rayon.index', [
             'data' => Rayon::orderBy('name')->paginate($this->limitData),
-        ])->with('i', (request()->input('page', 1) - 1) * $this->limitData);
+        ])->with('i', paginationNumber($this->limitData));
     }
 
     /**
@@ -106,6 +106,6 @@ class RayonController extends Controller
         return view('dashboard.rayon.students', [
             'data' => User::where('rayon_id', $rayon->id)->where('role', 'Siswa')->paginate($this->limitData),
             'rayon' => $rayon
-        ])->with('i', (request()->input('page', 1) - 1) * $this->limitData);
+        ])->with('i', paginationNumber($this->limitData));
     }
 }

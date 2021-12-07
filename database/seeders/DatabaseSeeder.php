@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Rayon;
 use App\Models\Rombel;
 use App\Models\User;
+use Database\Factories\StudentFactory;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -16,23 +17,77 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
+        for ($i=1; $i <= 5; $i++) { 
+            Rombel::create([
+                'name' => 'RPL XI-' . $i
+            ]);
+        }
 
-        Rombel::create([
-            'name' => 'RPL XI-2'
-        ]);
+        for ($i=1; $i <= 5; $i++) { 
+            Rombel::create([
+                'name' => 'MMD XI-' . $i
+            ]);
+        }
 
-        Rombel::create([
-            'name' => 'RPL XI-1'
-        ]);
+        for ($i=1; $i <= 5; $i++) { 
+            Rombel::create([
+                'name' => 'TKJ XI-' . $i
+            ]);
+        }
 
-        Rayon::create([
-            'name' => 'Cisarua 1'
-        ]);
+        for ($i=1; $i <= 5; $i++) { 
+            Rombel::create([
+                'name' => 'RPL X-' . $i
+            ]);
+        }
 
-        Rayon::create([
-            'name' => 'Cisarua 2'
-        ]);
+        for ($i=1; $i <= 5; $i++) { 
+            Rombel::create([
+                'name' => 'MMD X-' . $i
+            ]);
+        }
+
+        for ($i=1; $i <= 5; $i++) { 
+            Rombel::create([
+                'name' => 'TKJ X-' . $i
+            ]);
+        }
+
+        for ($i=1; $i <= 5; $i++) { 
+            Rombel::create([
+                'name' => 'RPL XII-' . $i
+            ]);
+        }
+
+        for ($i=1; $i <= 5; $i++) { 
+            Rombel::create([
+                'name' => 'MMD XII-' . $i
+            ]);
+        }
+
+        for ($i=1; $i <= 5; $i++) { 
+            Rombel::create([
+                'name' => 'TKJ XII-' . $i
+            ]);
+        }
+
+        for ($i=1; $i <= 5; $i++) { 
+            Rayon::create([
+                'name' => 'Cisarua ' . $i
+            ]);
+        }
+
+        for ($i=1; $i <= 5; $i++) { 
+            Rayon::create([
+                'name' => 'Ciawi ' . $i
+            ]);
+        }
+
+        for ($i=1; $i <= 5; $i++) { 
+            Rayon::create([
+                'name' => 'Cibedug ' . $i
+            ]);
+        }
 
         User::create([
             'name' => 'Abi Noval Fauzi',
@@ -40,31 +95,10 @@ class DatabaseSeeder extends Seeder
             'email' => 'abinovalfauzi@smkwikrama.sch.id',
             'password' => bcrypt('password'),
             'role' => 'Admin',
+            'hash' => md5(bcrypt('abinovalfauzi@smkwikrama.sch.id')),
             'avatar' => '/img/avatar/a.png'
         ]);
 
-        User::create([
-            'name' => 'Siswa 1',
-            'nis' => '12001111',
-            'rombel_id' => 2,
-            'rayon_id' => 1,
-            'username' => 'asdasd',
-            'email' => 'asdasd@smkwikrama.sch.id',
-            'password' => bcrypt('password'),
-            'role' => 'Siswa',
-            'avatar' => '/img/avatar/s.png'
-        ]);
-
-        User::create([
-            'name' => 'Siswa 2',
-            'nis' => '12001112',
-            'rombel_id' => 1,
-            'rayon_id' => 2,
-            'username' => 'asdasdasd',
-            'email' => 'asdasdasd@smkwikrama.sch.id',
-            'password' => bcrypt('password'),
-            'role' => 'Siswa',
-            'avatar' => '/img/avatar/s.png'
-        ]);
+        User::factory(1200)->create();
     }
 }
