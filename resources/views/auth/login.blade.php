@@ -4,9 +4,9 @@
 <head>
    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-   <title>Abseen - Login page</title>
+   <title>Login | Abseen</title>
    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-   <meta name="title" content="Abseen - Login page">
+   <meta name="title" content="Login | Abseen">
    <meta name="author" content="Abi Noval Fauzi">
    <meta name="description" content="Abseen adalah platform absensi online yang mudah digunakan!">
    <meta name="keywords"
@@ -15,14 +15,14 @@
 
    <meta property="og:type" content="website">
    <meta property="og:url" content="http://abseen.rf.gd">
-   <meta property="og:title" content="Abseen - Login page">
+   <meta property="og:title" content="Login | Abseen">
    <meta property="og:description" content="Abseen adalah platform absensi online yang mudah digunakan!">
    <meta property="og:image"
       content="{{ asset('img/Abseen.png') }}">
 
    <meta property="twitter:card" content="summary_large_image">
    <meta property="twitter:url" content="http://abseen.rf.gd">
-   <meta property="twitter:title" content="Abseen - Login page">
+   <meta property="twitter:title" content="Login | Abseen">
    <meta property="twitter:description" content="Abseen adalah platform absensi online yang mudah digunakan!">
    <meta property="twitter:image"
       content="{{ asset('img/Abseen.png') }}">
