@@ -215,8 +215,7 @@ class AbsentController extends Controller
         //? Menampilkan halaman kehadiran absensi siswa
         return view('dashboard.absensi.students', [
             'data' => $absent,
-            'siswa' => DB::table('presences')
-                ->select('presences.*', 'users.*', 'rombels.name AS rombel', 'rayons.name AS rayon', 'presences.id AS presence_id')
+            'siswa' => Presence::select('presences.*', 'users.*', 'rombels.name AS rombel', 'rayons.name AS rayon', 'presences.id AS presence_id')
                 ->join('users', 'users.id', '=', 'presences.user_id')
                 ->join('absents', 'absents.id', '=', 'presences.absent_id')
                 ->join('rombels', 'rombels.id', '=', 'users.rombel_id')
