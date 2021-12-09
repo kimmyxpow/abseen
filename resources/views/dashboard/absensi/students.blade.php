@@ -67,7 +67,7 @@
                      <th class="border-0">Rombel</th>
                      <th class="border-0">Absen</th>
                      <th class="border-0">Pulang</th>
-                     <th class="border-0">Ket</th>
+                     <th class="border-0 rounded-end">Ket</th>
                   </tr>
                </thead>
                <tbody>
